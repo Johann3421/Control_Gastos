@@ -1,0 +1,158 @@
+@import "tailwindcss";
+
+/* Dark mode via class strategy */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Superficies Light */
+  --color-surface-0:   #ffffff;
+  --color-surface-50:  #f8fafc;
+  --color-surface-100: #f1f5f9;
+  --color-surface-200: #e2e8f0;
+  --color-surface-300: #cbd5e1;
+
+  /* Superficies Dark */
+  --color-dark-950: #060910;
+  --color-dark-900: #0c1018;
+  --color-dark-800: #111827;
+  --color-dark-700: #1a2332;
+  --color-dark-600: #243044;
+  --color-dark-500: #2d3c52;
+
+  /* Acento principal — Índigo */
+  --color-primary-50:  #eef2ff;
+  --color-primary-100: #e0e7ff;
+  --color-primary-400: #818cf8;
+  --color-primary-500: #6366f1;
+  --color-primary-600: #4f46e5;
+  --color-primary-700: #4338ca;
+
+  /* Ingresos — Verde esmeralda */
+  --color-income-50:  #ecfdf5;
+  --color-income-100: #d1fae5;
+  --color-income-400: #34d399;
+  --color-income-500: #10b981;
+  --color-income-600: #059669;
+
+  /* Gastos — Rosa/Rojo coral */
+  --color-expense-50:  #fff1f2;
+  --color-expense-100: #ffe4e6;
+  --color-expense-400: #fb7185;
+  --color-expense-500: #f43f5e;
+  --color-expense-600: #e11d48;
+
+  /* Ahorro — Ámbar dorado */
+  --color-saving-50:  #fffbeb;
+  --color-saving-100: #fef3c7;
+  --color-saving-400: #fbbf24;
+  --color-saving-500: #f59e0b;
+  --color-saving-600: #d97706;
+
+  /* Inversión — Violeta */
+  --color-investment-50:  #f5f3ff;
+  --color-investment-100: #ede9fe;
+  --color-investment-400: #a78bfa;
+  --color-investment-500: #8b5cf6;
+  --color-investment-600: #7c3aed;
+
+  /* Neutros para texto */
+  --color-ink-primary:   #0f172a;
+  --color-ink-secondary: #475569;
+  --color-ink-tertiary:  #94a3b8;
+  --color-ink-inverse:   #f8fafc;
+
+  /* Fuentes */
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Sombras personalizadas */
+  --shadow-card:        0 1px 3px rgb(0 0 0 / 0.06), 0 4px 12px rgb(0 0 0 / 0.08);
+  --shadow-card-hover:  0 4px 8px rgb(0 0 0 / 0.08), 0 16px 28px rgb(0 0 0 / 0.12);
+  --shadow-float:       0 20px 60px -12px rgb(99 102 241 / 0.25);
+  --shadow-income:      0 4px 20px rgb(16 185 129 / 0.20);
+  --shadow-expense:     0 4px 20px rgb(244 63 94 / 0.20);
+  --shadow-input-focus: 0 0 0 3px rgb(99 102 241 / 0.15);
+
+  /* Animaciones */
+  --animate-count-up:  count-up 0.4s ease-out forwards;
+  --animate-slide-in:  slide-in 0.3s ease-out forwards;
+  --animate-pop:       pop 0.35s ease-out forwards;
+  --animate-shimmer:   shimmer 1.8s linear infinite;
+  --animate-pulse-dot: pulse-dot 2s ease-in-out infinite;
+
+  @keyframes count-up {
+    0%   { opacity: 0; transform: translateY(8px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slide-in {
+    0%   { opacity: 0; transform: translateX(-16px); }
+    100% { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes pop {
+    0%   { transform: scale(0.92); opacity: 0; }
+    60%  { transform: scale(1.03); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  @keyframes shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.5; transform: scale(1.4); }
+  }
+  @keyframes progress-fill {
+    from { width: 0; }
+    to   { width: var(--progress-width, 0%); }
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-surface-50);
+  color: var(--color-ink-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.dark body {
+  background-color: var(--color-dark-950);
+  color: var(--color-ink-inverse);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-surface-300);
+  border-radius: 3px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: var(--color-dark-600);
+}
+
+/* Number inputs — hide default arrows */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Selection color */
+::selection {
+  background-color: rgb(99 102 241 / 0.2);
+  color: inherit;
+}
