@@ -22,7 +22,7 @@ export default async function BudgetsPage() {
         orderBy: { createdAt: "desc" },
       }),
     prisma.category.findMany({
-      where: { OR: [{ userId }, { isSystem: true }] },
+      where: { OR: [{ userId }, { isDefault: true }] },
       orderBy: { name: "asc" },
       select: { id: true, name: true, icon: true },
     }),
