@@ -1,0 +1,41 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Next.js build output
+.next
+out
+
+# Prisma generated client (built inside Docker)
+prisma/generated
+
+# Env files
+.env
+.env.*
+!.env.example
+
+# Git
+.git
+.gitignore
+
+# Dev tooling
+.eslintcache
+.prettierrc*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Tests
+coverage
+__tests__
+
+# Docker
+Dockerfile*
+docker-compose*
+.dockerignore
