@@ -42,16 +42,18 @@ export default async function BudgetsPage() {
   })
   const spentMap = new Map(spent.map((s) => [s.categoryId, s._sum.amount ?? 0]))
 
-  const budgetsWithUsage = budgets.map((b) => ({
-    ...b,
-    spent: b.categoryId ? (spentMap.get(b.categoryId) ?? 0) : 0,
-    percentageUsed:
-      b.amount > 0
-        ? ((b.categoryId ? (spentMap.get(b.categoryId) ?? 0) : 0) / b.amount) * 100
-        : 0,
-    isOverBudget:
-      b.amount > 0 && (b.categoryId ? (spentMap.get(b.categoryId) ?? 0) : 0) > b.amount,
-  }))
+  const budgetsWithUsage = budgets.map((b) => {
+    const rawSpent = b.categoryId ? (spentMap.get(b.categoryId) ?? 0) : 0
+    const spentNum = Number(rawSpent)
+    const amountNum = Number(b.amount)
+
+    return {
+      ...b,
+      spent: spentNum,
+      percentageUsed: amountNum > 0 ? (spentNum / amountNum) * 100 : 0,
+      isOverBudget: amountNum > 0 && spentNum > amountNum,
+    }
+  })
 
   return <BudgetsClient budgets={budgetsWithUsage as any} categories={categories} />
 }
