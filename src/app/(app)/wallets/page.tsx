@@ -25,7 +25,7 @@ export default async function WalletsPage() {
   const balanceMap = new Map<string, number>()
   for (const row of balanceTxs) {
     const cur = balanceMap.get(row.walletId) ?? 0
-    const amt = row._sum.amount ?? 0
+    const amt = Number(row._sum.amount ?? 0)
     if (row.type === "INCOME") balanceMap.set(row.walletId, cur + amt)
     else balanceMap.set(row.walletId, cur - amt)
   }
