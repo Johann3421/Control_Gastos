@@ -36,8 +36,8 @@ export default async function AnalyticsPage() {
       income: 0,
       expense: 0,
     }
-    if (tx.type === "INCOME") existing.income += tx.amount
-    else if (tx.type === "EXPENSE") existing.expense += tx.amount
+    if (tx.type === "INCOME") existing.income += Number(tx.amount)
+    else if (tx.type === "EXPENSE") existing.expense += Number(tx.amount)
     categoryMap.set(tx.categoryId, existing)
   }
 
