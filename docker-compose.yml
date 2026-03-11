@@ -52,7 +52,7 @@ services:
       migrate:
         condition: service_completed_successfully
     ports:
-      - "3000:3000"
+      - "3005:3000"
 
 volumes:
   postgres_data:
