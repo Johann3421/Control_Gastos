@@ -23,19 +23,19 @@ export async function GET(req: NextRequest) {
       currentAmount: Number(g.currentAmount),
       deadline: g.deadline,
     })
+    const targetNum = Number(g.targetAmount)
+    const currentNum = Number(g.currentAmount)
     const percentage =
-      g.targetAmount > 0
+      targetNum > 0
         ? Math.min(
             100,
-            Math.round(
-              (Number(g.currentAmount) / Number(g.targetAmount)) * 1000
-            ) / 10
+            Math.round((currentNum / targetNum) * 1000) / 10
           )
         : 0
     return {
       ...g,
-      targetAmount: Number(g.targetAmount),
-      currentAmount: Number(g.currentAmount),
+      targetAmount: targetNum,
+      currentAmount: currentNum,
       percentage,
       ...projection,
     }
