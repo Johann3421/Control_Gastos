@@ -47,6 +47,8 @@ services:
       NEXTAUTH_URL: ${NEXTAUTH_URL}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      # Allow Auth.js to trust the host provided by the proxy (dokploy)
+      AUTH_TRUST_HOST: "true"
       NODE_ENV: production
     depends_on:
       migrate:
