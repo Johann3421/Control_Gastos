@@ -35,7 +35,7 @@ export default function RegisterPage() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<RegisterInput>({
+  } = useForm({
     resolver: zodResolver(registerSchema),
     defaultValues: { currency: "PEN" },
   })
