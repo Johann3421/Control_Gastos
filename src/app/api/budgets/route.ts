@@ -12,8 +12,10 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
   }
 
+  const userId = session.user.id
+
   const budgets = await prisma.budget.findMany({
-    where: { userId: session.user.id },
+    where: { userId },
     include: {
       category: { select: { id: true, name: true, icon: true, color: true } },
     },
@@ -22,7 +24,7 @@ export async function GET(req: NextRequest) {
 
   const budgetsWithUsage = await Promise.all(
     budgets.map(async (b) => {
-      const usage = await getBudgetUsage(b.id, session.user.id)
+      const usage = await getBudgetUsage(b.id, userId)
       return {
         ...b,
         amount: Number(b.amount),
