@@ -14,6 +14,7 @@ const loginSchema = z.object({
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
+  trustHost: true,
   pages: {
     signIn: "/login",
     error: "/login",
@@ -25,27 +26,37 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
     Credentials({
       async authorize(credentials) {
-        const parsed = loginSchema.safeParse(credentials)
-        if (!parsed.success) return null
+        try {
+          const parsed = loginSchema.safeParse(credentials)
+          if (!parsed.success) return null
 
-        const { email, password } = parsed.data
+          const { email, password } = parsed.data
 
-        const user = await prisma.user.findUnique({ where: { email } })
-        if (!user || !user.password) return null
+          const user = await prisma.user.findUnique({ where: { email } })
+          if (!user || !user.password) return null
 
-        const isValid = await bcrypt.compare(password, user.password)
-        if (!isValid) return null
+          const isValid = await bcrypt.compare(password, user.password)
+          if (!isValid) return null
 
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          image: user.image,
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            image: user.image,
+          }
+        } catch (err) {
+          console.error("[auth][authorize] error:", err)
+          return null
         }
       },
     }),
   ],
   callbacks: {
+    async signIn({ account }) {
+      // Allow credentials sign-in even without a linked Account record in DB
+      if (account?.provider === "credentials") return true
+      return true
+    },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id
