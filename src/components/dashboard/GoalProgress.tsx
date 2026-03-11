@@ -14,7 +14,7 @@ interface GoalProgressProps {
 export function GoalProgress({ goals }: GoalProgressProps) {
   const { currency } = usePreferencesStore()
 
-  const activeGoals = goals.filter((g) => g.status === "ACTIVE").slice(0, 4)
+  const activeGoals = goals.filter((g) => g.status === "IN_PROGRESS").slice(0, 4)
 
   return (
     <div className="bg-white dark:bg-dark-900 rounded-2xl p-5 border border-surface-200 dark:border-dark-700">
@@ -47,10 +47,10 @@ export function GoalProgress({ goals }: GoalProgressProps) {
                 </span>
               </div>
               <ProgressBar value={goal.progressPercentage} />
-              {goal.targetDate && (
+              {goal.deadline && (
                 <p className="text-[11px] text-ink-tertiary mt-1">
                   Meta:{" "}
-                  {new Date(goal.targetDate).toLocaleDateString("es-PE", {
+                  {new Date(goal.deadline).toLocaleDateString("es-PE", {
                     month: "short",
                     year: "numeric",
                   })}

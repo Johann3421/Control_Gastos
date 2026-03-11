@@ -7,10 +7,7 @@ interface EmptyStateProps {
   icon?: LucideIcon | React.ReactNode | string
   title: string
   description?: string
-  action?: {
-    label: string
-    onClick: () => void
-  }
+  action?: React.ReactNode
   className?: string
 }
 
@@ -51,9 +48,7 @@ export function EmptyState({
       {description && (
         <p className="text-sm text-ink-secondary max-w-xs mb-6">{description}</p>
       )}
-      {action && (
-        <Button onClick={action.onClick}>{action.label}</Button>
-      )}
+      {action && <div className="mt-4">{action}</div>}
     </div>
   )
 }

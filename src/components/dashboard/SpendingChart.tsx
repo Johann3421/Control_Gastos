@@ -12,7 +12,7 @@ import {
   Legend,
 } from "recharts"
 import { usePreferencesStore } from "@/store/preferences"
-import { formatCurrency } from "@/lib/currency"
+import { formatCurrency, formatCurrencyCompact } from "@/lib/currency"
 import { Skeleton } from "@/components/ui/Skeleton"
 import type { MonthlyChartData } from "@/types"
 
@@ -24,7 +24,7 @@ export function SpendingChart({ data }: SpendingChartProps) {
   const { currency } = usePreferencesStore()
 
   const fmt = (v: number | string) =>
-    typeof v === "number" ? formatCurrency(v, currency, { compact: true }) : v
+    typeof v === "number" ? formatCurrencyCompact(v, currency) : v
 
   return (
     <div className="bg-white dark:bg-dark-900 rounded-2xl p-5 border border-surface-200 dark:border-dark-700">
@@ -51,8 +51,8 @@ export function SpendingChart({ data }: SpendingChartProps) {
             tickLine={false}
           />
           <Tooltip
-            formatter={(value: number, name: string) => [
-              formatCurrency(value, currency),
+            formatter={(value: number | undefined, name: string | undefined) => [
+              formatCurrency(value ?? 0, currency),
               name === "income"
                 ? "Ingresos"
                 : name === "expenses"

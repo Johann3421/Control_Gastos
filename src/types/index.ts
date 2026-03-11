@@ -91,11 +91,9 @@ export interface BudgetWithUsage {
     icon: string
     color: string
   } | null
-  usedAmount: number
-  remainingAmount: number
-  percentage: number
-  isExceeded: boolean
-  status: "OK" | "WARNING" | "EXCEEDED"
+  spent: number
+  percentageUsed: number
+  isOverBudget: boolean
 }
 
 export interface GoalWithProgress {
@@ -112,11 +110,14 @@ export interface GoalWithProgress {
   daysLeft?: number | null
   monthlyRequired?: number | null
   percentage: number
+  progressPercentage: number
 }
 
 export interface DashboardStats {
   totalIncome: number
   totalExpense: number
+  totalSaving?: number
+  totalInvestment?: number
   netSaving: number
   savingRate: number
   transactionCount: number
@@ -140,6 +141,12 @@ export interface DashboardStats {
   } | null
   dailyAverage: number
   recentTransactions: TransactionWithRelations[]
+  // Fields added by dashboard page
+  totalBalance: number
+  monthIncome: number
+  monthExpenses: number
+  monthSavings: number
+  monthInvestments: number
 }
 
 export interface MonthlyChartData {

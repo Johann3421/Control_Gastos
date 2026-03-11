@@ -37,7 +37,7 @@ export function GoalsClient({ goals: initial }: { goals: Goal[] }) {
   const [goals, setGoals] = useState<Goal[]>(safeInitial as Goal[])
   const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [depositGoalId, setDepositGoalId] = useState<string | null>(null)
-  const [depositAmount, setDepositAmount] = useState(0)
+  const [depositAmount, setDepositAmount] = useState("")
   const [isPending, startTransition] = useTransition()
   const [isDepositing, startDepositing] = useTransition()
 
@@ -48,7 +48,7 @@ export function GoalsClient({ goals: initial }: { goals: Goal[] }) {
     watch,
     reset,
     formState: { errors },
-  } = useForm<FormValues>({ resolver: zodResolver(goalSchema) })
+  } = useForm({ resolver: zodResolver(goalSchema) })
 
   const targetAmount = watch("targetAmount") ?? 0
 
@@ -62,7 +62,7 @@ export function GoalsClient({ goals: initial }: { goals: Goal[] }) {
         })
         if (!res.ok) throw new Error()
         const { goal } = await res.json()
-        setGoals((prev) => [...prev, { ...goal, progressPercentage: 0 }])
+        setGoals((prev) => [...prev, { ...goal, progressPercentage: 0, percentage: 0 }])
         toast.success("Meta creada")
         reset()
         setIsCreateOpen(false)
@@ -73,12 +73,12 @@ export function GoalsClient({ goals: initial }: { goals: Goal[] }) {
   }
 
   const onDeposit = async () => {
-    if (!depositGoalId || depositAmount <= 0) return
+    if (!depositGoalId || parseFloat(depositAmount) <= 0) return
     try {
       const res = await fetch("/api/goals", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "deposit", goalId: depositGoalId, amount: depositAmount }),
+        body: JSON.stringify({ action: "deposit", goalId: depositGoalId, amount: parseFloat(depositAmount) }),
       })
       if (!res.ok) throw new Error()
       const { goal } = await res.json()
@@ -93,13 +93,17 @@ export function GoalsClient({ goals: initial }: { goals: Goal[] }) {
                   goal.targetAmount > 0
                     ? (goal.currentAmount / goal.targetAmount) * 100
                     : 0,
+                percentage:
+                  goal.targetAmount > 0
+                    ? (goal.currentAmount / goal.targetAmount) * 100
+                    : 0,
               }
             : g
         )
       )
       toast.success("Depósito registrado")
       setDepositGoalId(null)
-      setDepositAmount(0)
+      setDepositAmount("")
     } catch {
       toast.error("Error al registrar el depósito")
     }
@@ -184,7 +188,7 @@ export function GoalsClient({ goals: initial }: { goals: Goal[] }) {
                   <Button
                     size="xs"
                     variant="ghost"
-                    onClick={() => setDepositGoalId(g.id)}
+                    onClick={() => { setDepositGoalId(g.id); setDepositAmount("") }}
                   >
                     <PiggyBank className="w-3.5 h-3.5 mr-1" />
                     Depositar
@@ -203,12 +207,11 @@ export function GoalsClient({ goals: initial }: { goals: Goal[] }) {
           <AmountInput
             label="Monto objetivo"
             currency={currency}
-            value={targetAmount}
+            value={String(targetAmount ?? "")}
             onChange={(v) => setValue("targetAmount", v, { shouldValidate: true })}
             error={errors.targetAmount?.message}
           />
-          <Input type="date" label="Fecha límite (opcional)" {...register("targetDate")} />
-          <Input label="Descripción (opcional)" placeholder="Notas sobre esta meta..." {...register("notes")} />
+          <Input type="date" label="Fecha límite (opcional)" {...register("deadline")} />
           <div className="flex gap-2 pt-1">
             <Button type="button" variant="secondary" className="flex-1" onClick={() => setIsCreateOpen(false)}>Cancelar</Button>
             <Button type="submit" className="flex-1" disabled={isPending}>
@@ -222,7 +225,7 @@ export function GoalsClient({ goals: initial }: { goals: Goal[] }) {
       {/* Deposit modal */}
       <Modal
         isOpen={depositGoalId !== null}
-        onClose={() => { setDepositGoalId(null); setDepositAmount(0) }}
+        onClose={() => { setDepositGoalId(null); setDepositAmount("") }}
         title="Registrar depósito"
       >
         <div className="space-y-4">
@@ -230,11 +233,11 @@ export function GoalsClient({ goals: initial }: { goals: Goal[] }) {
             label="Monto a depositar"
             currency={currency}
             value={depositAmount}
-            onChange={setDepositAmount}
+            onChange={(v) => setDepositAmount(v)}
           />
           <div className="flex gap-2">
             <Button variant="secondary" className="flex-1" onClick={() => setDepositGoalId(null)}>Cancelar</Button>
-            <Button className="flex-1" onClick={onDeposit} disabled={depositAmount <= 0}>
+            <Button className="flex-1" onClick={onDeposit} disabled={parseFloat(depositAmount) <= 0}>
               <PiggyBank className="w-4 h-4 mr-1.5" />
               Depositar
             </Button>

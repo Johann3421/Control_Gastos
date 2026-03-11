@@ -148,22 +148,8 @@ export const useFiltersStore = create<FiltersState>()(
     {
       name: "flowtrack-filters",
       partialize: (state) => ({ activeMonth: state.activeMonth }),
-      onRehydrateStorage: () => (persistedState) => {
-        if (!persistedState) return
-        try {
-          const raw = (persistedState as any).activeMonth
-          if (raw) {
-            const active = raw instanceof Date ? raw : new Date(raw)
-            // Ensure startDate/endDate are aligned with persisted activeMonth
-            set({
-              activeMonth: active,
-              startDate: startOfMonth(active),
-              endDate: endOfMonth(active),
-            })
-          }
-        } catch (err) {
-          // ignore and leave defaults
-        }
+      onRehydrateStorage: () => (_persistedState) => {
+        // startDate/endDate are re-derived at component level from activeMonth
       },
     }
   )

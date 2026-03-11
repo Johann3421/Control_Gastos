@@ -49,7 +49,7 @@ export function TransactionForm({ categories, wallets, transaction }: Transactio
     watch,
     reset,
     formState: { errors },
-  } = useForm<FormValues>({
+  } = useForm({
     resolver: zodResolver(transactionSchema),
     defaultValues: {
       type: defaultType as FormValues["type"],
@@ -129,7 +129,7 @@ export function TransactionForm({ categories, wallets, transaction }: Transactio
         <AmountInput
           label="Monto"
           currency={currency}
-          value={amount}
+          value={String(amount ?? "")}
           onChange={(v) => setValue("amount", v, { shouldValidate: true })}
           error={errors.amount?.message}
         />

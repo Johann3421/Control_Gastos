@@ -51,7 +51,7 @@ export function BudgetsClient({ budgets: initial, categories }: BudgetsClientPro
     watch,
     reset,
     formState: { errors },
-  } = useForm<FormValues>({ resolver: zodResolver(budgetSchema) })
+  } = useForm({ resolver: zodResolver(budgetSchema) })
 
   const amount = watch("amount") ?? 0
 
@@ -182,7 +182,7 @@ export function BudgetsClient({ budgets: initial, categories }: BudgetsClientPro
           <AmountInput
             label="Monto límite"
             currency={currency}
-            value={amount}
+            value={String(amount ?? "")}
             onChange={(v) => setValue("amount", v, { shouldValidate: true })}
             error={errors.amount?.message}
           />

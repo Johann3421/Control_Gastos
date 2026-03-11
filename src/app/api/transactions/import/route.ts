@@ -54,6 +54,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Ninguna transacción válida" }, { status: 400 })
     }
 
+    const userId = session.user.id
+
     await prisma.transaction.createMany({
       data: validTransactions.map((t) => ({
         amount: t.amount,
@@ -62,7 +64,7 @@ export async function POST(req: NextRequest) {
         date: new Date(t.date),
         categoryId: t.categoryId,
         walletId: t.walletId,
-        userId: session.user.id,
+        userId,
         tags: t.tags ?? [],
         attachments: [],
       })),

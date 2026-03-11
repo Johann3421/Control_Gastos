@@ -50,7 +50,7 @@ export function CategoryDonut({ data }: CategoryDonutProps) {
               ))}
             </Pie>
             <Tooltip
-              formatter={(v: number) => formatCurrency(v, currency)}
+              formatter={(v: number | undefined) => formatCurrency(v ?? 0, currency)}
               contentStyle={{
                 background: "#fff",
                 border: "1px solid var(--color-surface-200)",

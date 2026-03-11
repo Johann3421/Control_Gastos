@@ -27,16 +27,14 @@ export async function GET(req: NextRequest) {
     const currentNum = Number(g.currentAmount)
     const percentage =
       targetNum > 0
-        ? Math.min(
-            100,
-            Math.round((currentNum / targetNum) * 1000) / 10
-          )
+        ? Math.min(100, Math.round((currentNum / targetNum) * 1000) / 10)
         : 0
     return {
       ...g,
       targetAmount: targetNum,
       currentAmount: currentNum,
       percentage,
+      progressPercentage: percentage,
       ...projection,
     }
   })

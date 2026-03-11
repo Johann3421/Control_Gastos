@@ -147,7 +147,7 @@ export function TransactionsClient({ categories, wallets }: TransactionsClientPr
         </div>
         <div className="flex items-center gap-2">
           {selectedTransactionIds && selectedTransactionIds.length > 0 ? (
-            <Button variant="destructive" size="sm" onClick={handleDeleteSelected}>
+            <Button variant="danger" size="sm" onClick={handleDeleteSelected}>
               Eliminar seleccionadas
             </Button>
           ) : null}

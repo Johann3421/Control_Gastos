@@ -65,7 +65,7 @@ export function WalletsClient({ wallets: initial }: { wallets: Wallet[] }) {
     watch,
     reset,
     formState: { errors },
-  } = useForm<FormValues>({
+  } = useForm({
     resolver: zodResolver(walletSchema),
     defaultValues: { type: "CHECKING", initialBalance: 0, currency: "PEN" },
   })
@@ -189,8 +189,8 @@ export function WalletsClient({ wallets: initial }: { wallets: Wallet[] }) {
           <AmountInput
             label="Saldo inicial"
             currency={currency}
-            value={initialBalance}
-            onChange={(v) => setValue("initialBalance", v)}
+            value={String(initialBalance ?? "")}
+            onChange={(v) => setValue("initialBalance", parseFloat(v) || 0)}
           />
           <div className="flex gap-2 pt-1">
             <Button type="button" variant="secondary" className="flex-1" onClick={() => setIsCreateOpen(false)}>Cancelar</Button>

@@ -16,7 +16,7 @@ import {
   Line,
 } from "recharts"
 import { usePreferencesStore } from "@/store/preferences"
-import { formatCurrency } from "@/lib/currency"
+import { formatCurrency, formatCurrencyCompact } from "@/lib/currency"
 import type { MonthlyChartData } from "@/types"
 
 interface CategoryBreakdown {
@@ -36,7 +36,7 @@ interface AnalyticsClientProps {
 
 export function AnalyticsClient({ chartData, categoryBreakdown }: AnalyticsClientProps) {
   const { currency } = usePreferencesStore()
-  const fmt = (v: number) => formatCurrency(v, currency, { compact: true })
+  const fmt = (v: number) => formatCurrencyCompact(v, currency)
   const fmtFull = (v: number) => formatCurrency(v, currency)
 
   const topExpenses = categoryBreakdown.slice(0, 8)
@@ -65,8 +65,8 @@ export function AnalyticsClient({ chartData, categoryBreakdown }: AnalyticsClien
               tickLine={false}
             />
             <Tooltip
-              formatter={(v: number, name: string) => [
-                fmtFull(v),
+              formatter={(v: number | undefined, name: string | undefined) => [
+                fmtFull(v ?? 0),
                 name === "income" ? "Ingresos" : "Gastos",
               ]}
               contentStyle={{
@@ -110,7 +110,7 @@ export function AnalyticsClient({ chartData, categoryBreakdown }: AnalyticsClien
                 tickLine={false}
               />
               <Tooltip
-                formatter={(v: number) => [fmtFull(v), "Neto"]}
+                formatter={(v: number | undefined) => [fmtFull(v ?? 0), "Neto"]}
                 contentStyle={{
                   background: "#fff",
                   border: "1px solid var(--color-surface-200)",
@@ -142,7 +142,7 @@ export function AnalyticsClient({ chartData, categoryBreakdown }: AnalyticsClien
                     <Cell key={c.id} fill={c.color} stroke="none" />
                   ))}
                 </Pie>
-                <Tooltip formatter={(v: number) => fmtFull(v)} contentStyle={{ background: "#fff", border: "1px solid var(--color-surface-200)", borderRadius: 10, fontSize: 12 }} />
+                <Tooltip formatter={(v: number | undefined) => fmtFull(v ?? 0)} contentStyle={{ background: "#fff", border: "1px solid var(--color-surface-200)", borderRadius: 10, fontSize: 12 }} />
               </PieChart>
             </ResponsiveContainer>
             <div className="flex-1 space-y-1.5 overflow-auto max-h-40">

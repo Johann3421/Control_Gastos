@@ -12,10 +12,12 @@ interface AmountInputProps {
   placeholder?: string
   large?: boolean
   autoFocus?: boolean
+  label?: string
+  error?: string
 }
 
 export const AmountInput = forwardRef<HTMLInputElement, AmountInputProps>(
-  ({ value, onChange, currency = "PEN", className, placeholder, large, autoFocus }, ref) => {
+  ({ value, onChange, currency = "PEN", className, placeholder, large, autoFocus, label, error }, ref) => {
     const symbol = getCurrencySymbol(currency)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,34 +36,38 @@ export const AmountInput = forwardRef<HTMLInputElement, AmountInputProps>(
       : ""
 
     return (
-      <div
-        className={cn(
-          "relative flex items-center bg-surface-50 dark:bg-dark-700 border border-surface-300 dark:border-dark-500 rounded-xl overflow-hidden focus-within:border-primary-500 transition-all",
-          className
-        )}
-      >
-        <span
+      <div>
+        {label && <label className="block text-xs font-medium text-ink-secondary dark:text-ink-muted mb-1">{label}</label>}
+        <div
           className={cn(
-            "pl-4 text-ink-tertiary font-mono select-none",
-            large ? "text-2xl" : "text-sm"
+            "relative flex items-center bg-surface-50 dark:bg-dark-700 border border-surface-300 dark:border-dark-500 rounded-xl overflow-hidden focus-within:border-primary-500 transition-all",
+            className
           )}
         >
-          {symbol}
-        </span>
-        <input
-          ref={ref}
-          type="text"
-          inputMode="decimal"
-          value={value}
-          onChange={handleChange}
-          placeholder={placeholder ?? "0.00"}
-          autoFocus={autoFocus}
-          aria-label={`Monto en ${currency}`}
-          className={cn(
-            "flex-1 pl-2 pr-4 py-2.5 bg-transparent font-mono text-ink-primary dark:text-ink-inverse placeholder-ink-tertiary focus:outline-none tabular-nums",
-            large ? "text-3xl font-bold py-3" : "text-sm"
-          )}
-        />
+          <span
+            className={cn(
+              "pl-4 text-ink-tertiary font-mono select-none",
+              large ? "text-2xl" : "text-sm"
+            )}
+          >
+            {symbol}
+          </span>
+          <input
+            ref={ref}
+            type="text"
+            inputMode="decimal"
+            value={value}
+            onChange={handleChange}
+            placeholder={placeholder ?? "0.00"}
+            autoFocus={autoFocus}
+            aria-label={`Monto en ${currency}`}
+            className={cn(
+              "flex-1 pl-2 pr-4 py-2.5 bg-transparent font-mono text-ink-primary dark:text-ink-inverse placeholder-ink-tertiary focus:outline-none tabular-nums",
+              large ? "text-3xl font-bold py-3" : "text-sm"
+            )}
+          />
+        </div>
+        {error && <p className="text-xs text-expense-500 mt-1">{error}</p>}
       </div>
     )
   }

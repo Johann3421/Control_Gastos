@@ -92,11 +92,12 @@ export async function POST(req: NextRequest) {
     }
 
     const { recurringConfig, isRecurring, ...txData } = parsed.data
+    const userId = session.user.id
 
     const transaction = await prisma.$transaction(async (tx) => {
       let recurringId: string | undefined
 
-      if (isRecurring && recurringConfig) {
+    if (isRecurring && recurringConfig) {
         const recurring = await tx.recurringTransaction.create({
           data: {
             description: txData.description,
@@ -109,7 +110,7 @@ export async function POST(req: NextRequest) {
             dayOfMonth: recurringConfig.dayOfMonth ?? null,
             categoryId: txData.categoryId,
             walletId: txData.walletId,
-            userId: session.user.id,
+            userId,
           },
         })
         recurringId = recurring.id
@@ -119,7 +120,7 @@ export async function POST(req: NextRequest) {
         data: {
           ...txData,
           isRecurring: isRecurring ?? false,
-          userId: session.user.id,
+          userId,
           recurringId: recurringId ?? null,
         },
         include: {

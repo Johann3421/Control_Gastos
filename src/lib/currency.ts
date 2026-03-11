@@ -55,6 +55,15 @@ export function parseAmount(input: string): number {
   return parseFloat(cleaned) || 0
 }
 
+export function formatCurrencyCompact(amount: number, currency = "PEN"): string {
+  return new Intl.NumberFormat("es-PE", {
+    style: "currency",
+    currency,
+    notation: "compact",
+    maximumFractionDigits: 1,
+  }).format(amount)
+}
+
 export const CURRENCIES = [
   { code: "PEN", name: "Sol peruano", symbol: "S/" },
   { code: "USD", name: "Dólar estadounidense", symbol: "$" },
