@@ -69,5 +69,23 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       return session
     },
+    authorized({ auth, request: { nextUrl } }) {
+      const isLoggedIn = !!auth?.user
+      const isAuthPage =
+        nextUrl.pathname.startsWith("/login") ||
+        nextUrl.pathname.startsWith("/register")
+      const isApiAuth = nextUrl.pathname.startsWith("/api/auth")
+      const isPublic = nextUrl.pathname === "/" || isAuthPage || isApiAuth
+
+      if (isAuthPage && isLoggedIn) {
+        return Response.redirect(new URL("/dashboard", nextUrl))
+      }
+      if (!isLoggedIn && !isPublic) {
+        const loginUrl = new URL("/login", nextUrl)
+        loginUrl.searchParams.set("callbackUrl", nextUrl.pathname)
+        return Response.redirect(loginUrl)
+      }
+      return true
+    },
   },
 })
