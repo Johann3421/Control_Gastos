@@ -1,7 +1,15 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { usePreferencesStore } from "@/store/preferences"
 import { Sun, Moon, Monitor, Check } from "lucide-react"
+import { CategoriesClient } from "@/components/settings/CategoriesClient"
+
+type CategoryType = "EXPENSE" | "INCOME" | "SAVING" | "INVESTMENT" | "TRANSFER"
+interface CategoryRow {
+  id: string; name: string; type: CategoryType
+  icon: string; color: string; isDefault: boolean
+}
 
 const currencies = [
   { code: "PEN", label: "Sol peruano (S/)" },
@@ -40,6 +48,15 @@ export default function SettingsPage() {
     balanceVisible,
     setBalanceVisible,
   } = usePreferencesStore()
+
+  const [categories, setCategories] = useState<CategoryRow[]>([])
+
+  useEffect(() => {
+    fetch("/api/categories")
+      .then((r) => r.json())
+      .then((d) => { if (d.categories) setCategories(d.categories as CategoryRow[]) })
+      .catch(() => {})
+  }, [])
 
   return (
     <div className="space-y-6 max-w-2xl mx-auto">
@@ -152,6 +169,9 @@ export default function SettingsPage() {
           </button>
         </div>
       </section>
+
+      {/* Categories */}
+      <CategoriesClient initialCategories={categories} />
     </div>
   )
 }
